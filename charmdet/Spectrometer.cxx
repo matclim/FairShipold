@@ -121,21 +121,12 @@ void Spectrometer::SetBoxParam(Double_t SX, Double_t SY, Double_t SZ, Double_t z
   DimZPixelBox = SZPixel;
 }
 
-void Spectrometer::SetSiliconDZ(Double_t SiliconDZ)
-{
-  DimZSi = SiliconDZ;
-}
+//void Spectrometer::SetSiliconDZ(Double_t SiliconDZ)
+//{
+// DimZSi = SiliconDZ;
+//}
 
-void Spectrometer::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
-{ 
- zs0 = zSi0;
- zs1 = zSi1;
- zs2 = zSi2;
- zs3 = zSi3;
- zs4 = zSi4;
- zs5 = zSi5;
- pairwisedistance = PairSiDistance;
-}
+
 
 void Spectrometer::SetSciFiDetPositions(Double_t zSciFi1, Double_t zSciFi2)
 { 
