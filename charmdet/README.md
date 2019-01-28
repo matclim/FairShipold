@@ -7,9 +7,12 @@ This folder contains the geometry classes for the detectors used in charm cross 
 Classes currently used by charm simulation:
 
 * `Box` class: Emulsion Target 
-* `Spectrometer` class: Pixel and SciFi detectors
+* `Spectrometer` class: SciFi detectors (and formerly the Pixel detector)
 * `MufluxSpectrometer` class: Goliath structure and Drift Tubes T3 and T4  
 * `MuonTagger` class: RPCs for muon identification  
+
+	Classes currently being implemented in the charm simulation
+	* `Pixel` class: Pixel detector  (formerly in the Spectrometer class, is being reworked as a standalone)
 
 
 Classes currently used by muon flux simulation:  

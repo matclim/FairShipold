@@ -1,5 +1,5 @@
-#ifndef PIXELPOINT_H
-#define PIXELPOINT_H 1
+#ifndef PIXELDETECTORPOINT_H
+#define PIXELDETECTORPOINT_H 1
 
 
 #include "FairMCPoint.h"
@@ -7,13 +7,13 @@
 #include "TObject.h"
 #include "TVector3.h"
 
-class PixelPoint : public FairMCPoint
+class PixelDetectorPoint : public FairMCPoint
 {
 
   public:
 
     /** Default constructor **/
-    PixelPoint();
+    PixelDetectorPoint();
 
 
     /** Constructor with arguments
@@ -27,11 +27,11 @@ class PixelPoint : public FairMCPoint
      **/
 
     
-    PixelPoint(Int_t trackID, Int_t detID, TVector3 pos, TVector3 mom,
+    PixelDetectorPoint(Int_t trackID, Int_t detID, TVector3 pos, TVector3 mom,
 		Double_t tof, Double_t length, Double_t eLoss, Int_t pdgCode);
 
     /** Destructor **/
-    virtual ~PixelPoint();
+    virtual ~PixelDetectorPoint();
 
     /** Output to screen **/
     virtual void Print(const Option_t* opt) const;
@@ -46,10 +46,10 @@ class PixelPoint : public FairMCPoint
     
     /** Copy constructor **/
     
-    PixelPoint(const PixelPoint& point);
-    PixelPoint operator=(const PixelPoint& point);
+    PixelDetectorPoint(const PixelDetectorPoint& point);
+    PixelDetectorPoint operator=(const PixelDetectorPoint& point);
 
-    ClassDef(PixelPoint,1)
+    ClassDef(PixelDetectorPoint,1)
 
 };
 

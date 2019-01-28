@@ -5,6 +5,7 @@ import shipunit as u
 from ShipGeoConfig import ConfigRegistry
 detectorList = []
 
+
 def getParameter(x,ship_geo,latestCharmGeo):
   lv = x.split('.')
   last = lv[len(lv)-1]
@@ -44,11 +45,20 @@ def configure(run,ship_geo):
  if (ship_geo.MufluxSpectrometer.muflux==False): 
     detectorList.append(Box)
    
+#-----Pixel Detector-----
+
+ PixelDetector = ROOT.PixelDetector("PixelDetector",ship_geo.PixelDetector.PX, ship_geo.PixelDetector.PY, ship_geo.PixelDetector.PZ,ROOT.kTRUE, ship_geo.PixelDetector.NPixelPlanes)
+ for Pixelplanenb in range(ship_geo.PixelDetector.NPixelPlanes):
+ 	exec('PixelPlaneposition' + '=' + 'zSi_' + str(Pixelplanenb))
+ 	PixelDetector.SetSiliconDetPositions(ship_geo.PixelDetector.locals()[PixelPLanePosition], ship_geo.PixelDetector.PairSiDistance)
+
+#-----End Pixel Detector-----
+
  Spectrometer = ROOT.Spectrometer("Spectrometer",ship_geo.Spectrometer.DX, ship_geo.Spectrometer.DY, ship_geo.Spectrometer.DZ,ROOT.kTRUE)
  Spectrometer.SetTransverseSizes(ship_geo.Spectrometer.D1Short, ship_geo.Spectrometer.D1Long, ship_geo.Spectrometer.Sioverlap, ship_geo.Spectrometer.DSciFi1X, ship_geo.Spectrometer.DSciFi1Y, ship_geo.Spectrometer.DSciFi2X, ship_geo.Spectrometer.DSciFi2Y)   
  Spectrometer.SetSiliconDZ(ship_geo.Spectrometer.DimZSi)
  #Spectrometer.SetSiliconDetNumber(ship_geo.Spectrometer.nSiDet)
- Spectrometer.SetSiliconDetPositions(ship_geo.Spectrometer.zSi0,ship_geo.Spectrometer.zSi1, ship_geo.Spectrometer.zSi2,ship_geo.Spectrometer.zSi3,ship_geo.Spectrometer.zSi4, ship_geo.Spectrometer.zSi5, ship_geo.Spectrometer.PairSiDistance)
+ 
  Spectrometer.SetSciFiDetPositions(ship_geo.Spectrometer.zSciFi1, ship_geo.Spectrometer.zSciFi2)
 # -----Goliath part by Annarita--------
  Spectrometer.SetGoliathSizes(ship_geo.Spectrometer.H, ship_geo.Spectrometer.TS, ship_geo.Spectrometer.LS, ship_geo.Spectrometer.BasisH);

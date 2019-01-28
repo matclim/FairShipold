@@ -1,18 +1,18 @@
-#include "PixelPoint.h"
+#include "PixelDetectorPoint.h"
 
 #include <iostream>
 using std::cout;
 using std::endl;
 
-ClassImp(PixelPoint)
+ClassImp(PixelDetectorPoint)
 
 // -----   Default constructor   -------------------------------------------
-PixelPoint::PixelPoint() : FairMCPoint() {}
+PixelDetectorPoint::PixelDetectorPoint() : FairMCPoint() {}
 // -------------------------------------------------------------------------
 
 // -----   Standard constructor   ------------------------------------------
 
-PixelPoint::PixelPoint(Int_t trackID, Int_t detID,TVector3 pos, TVector3 mom,
+PixelDetectorPoint::PixelDetectorPoint(Int_t trackID, Int_t detID,TVector3 pos, TVector3 mom,
                          Double_t tof, Double_t length,
 			 Double_t eLoss, Int_t pdgcode)
   : FairMCPoint(trackID, detID, pos, mom, tof, length, eLoss),fPdgCode(pdgcode)
@@ -22,13 +22,13 @@ PixelPoint::PixelPoint(Int_t trackID, Int_t detID,TVector3 pos, TVector3 mom,
 
 
 // -----   Destructor   ----------------------------------------------------
-PixelPoint::~PixelPoint() { }
+PixelDetectorPoint::~PixelDetectorPoint() { }
 // -------------------------------------------------------------------------
 
 // -----   Public method Print   -------------------------------------------
-void PixelPoint::Print(const Option_t* opt) const
+void PixelDetectorPoint::Print(const Option_t* opt) const
 {
-  cout << "-I- PixelPoint: pixel point for track " << fTrackID
+  cout << "-I- PixelDetectorPoint: pixel point for track " << fTrackID
        << " in detector " << fDetectorID << endl;
   cout << "    Position (" << fX << ", " << fY << ", " << fZ
        << ") cm" << endl;

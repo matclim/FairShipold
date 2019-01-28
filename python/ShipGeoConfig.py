@@ -4,6 +4,7 @@ import cPickle
 from contextlib import contextmanager
 
 
+
 def expand_env(string):
     """
     Expand environment variables in string:
@@ -44,13 +45,15 @@ class ConfigRegistry(dict):
 
     @staticmethod
     def loadpy(filename, **kwargs):
+	print('Registry filename is', filename, 'end of Registry filename')
         with open(expand_env(filename)) as fh:
             return ConfigRegistry.loadpys(fh.read(), **kwargs)
 
     @staticmethod
     def loadpys(config_string, **kwargs):
+	print('The config string is' ,config_string, 'end of config string')
         string_unixlf = config_string.replace('\r', '')
-        exec(string_unixlf, kwargs)
+        exec(string_unixlf, kwargs)                             
         return ConfigRegistry.get_latest_config()
 
     @staticmethod
@@ -63,6 +66,8 @@ class ConfigRegistry(dict):
     @staticmethod
     @contextmanager
     def register_config(name=None, base=None):
+	print('registar name is ', name, 'registar name end')
+	print('registar location', contextmanager)
         registry = ConfigRegistry()
         if base is not None:
             assert base in registry, "no base configuration (%s) found in the registry" % base
@@ -110,11 +115,13 @@ class AttrDict(dict):
 
 
 class Config(AttrDict):
+    
     def __init__(self, *args, **kwargs):
         super(Config, self).__init__(*args, **kwargs)
 
     def loads(self, buff):
         rv = cPickle.loads(buff)
+	print('rv is ',rv)
         self.clear()
         self.update(rv)
         return self
@@ -131,14 +138,17 @@ class Config(AttrDict):
     def dumps(self):
         return cPickle.dumps(self)
 
-    def load(self, filename):
-        with open(expand_env(filename)) as fh:
+    def load(self, filename):      
+    	print('filename is ', filename)
+	with open(expand_env(filename)) as fh:
             self.loads(fh.read())
         return self
+		
 
     def dump(self, filename):
         with open(expand_env(filename), "w") as fh:
             return fh.write(self.dumps())
+
 
     def __str__(self):
         return "ShipGeoConfig:\n  " + "\n  ".join(["%s: %s" % (k, self[k].__str__()) for k in sorted(self.keys()) if not k.startswith("_")])

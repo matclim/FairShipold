@@ -1,5 +1,5 @@
 #ifndef SPECTROMETERPOINT_H
-#define SPECTROMETERPOINT_H 1
+#define SPECTROMETERPOINT_H
 
 
 #include "FairMCPoint.h"
@@ -11,7 +11,7 @@ class SpectrometerPoint:public FairMCPoint
 {
 
   public:
-
+	
     /** Default constructor **/
     SpectrometerPoint();
 
@@ -49,6 +49,8 @@ class SpectrometerPoint:public FairMCPoint
     SpectrometerPoint operator=(const SpectrometerPoint& point);
 
     ClassDef(SpectrometerPoint,1)
+    
+    
 
 };
 

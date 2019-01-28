@@ -5,11 +5,11 @@
 #include "PixelDetector.h"
 
 #include "PixelDetectorPoint.h"
-
+/*
 #include "TGeoManager.h"
 #include "FairRun.h"                    // for FairRun
 #include "FairRuntimeDb.h"              // for FairRuntimeDb
-#include "Riosfwd.h"                    // for ostream
+#include <iosfwd>                      // for ostream
 #include "TList.h"                      // for TListIter, TList (ptr only)
 #include "TObjArray.h"                  // for TObjArray
 #include "TString.h"                    // for TString
@@ -18,8 +18,14 @@
 #include "TVirtualMC.h"
 
 #include "TGeoBBox.h"
+#include "TGeoTrd1.h"
+#include "TGeoCompositeShape.h"
+#include "TGeoTube.h"
+#include "TGeoArb8.h"
 #include "TGeoMaterial.h"
 #include "TGeoMedium.h"
+#include "TParticle.h"
+#include "TVector3.h"
 
 #include "TParticle.h"
 #include "TParticlePDG.h"
@@ -48,6 +54,46 @@
 #include <stddef.h>                     // for NULL
 #include <iostream>                     // for operator<<, basic_ostream,etc
 #include <string.h>
+*/
+
+#include "TGeoManager.h"
+#include "FairRun.h"                    // for FairRun
+#include "FairRuntimeDb.h"              // for FairRuntimeDb
+#include <iosfwd>                    // for ostream
+#include "TList.h"                      // for TListIter, TList (ptr only)
+#include "TObjArray.h"                  // for TObjArray
+#include "TString.h"                    // for TString
+#include "TClonesArray.h"
+#include "TVirtualMC.h"
+
+#include "TGeoBBox.h"
+#include "TGeoTrd1.h"
+#include "TGeoCompositeShape.h"
+#include "TGeoTube.h"
+#include "TGeoArb8.h"
+#include "TGeoMaterial.h"
+#include "TGeoMedium.h"
+#include "TParticle.h"
+#include "TVector3.h"
+
+#include "FairVolume.h"
+#include "FairGeoVolume.h"
+#include "FairGeoNode.h"
+#include "FairRootManager.h"
+#include "FairGeoLoader.h"
+#include "FairGeoInterface.h"
+#include "FairGeoMedia.h"
+#include "FairGeoBuilder.h"
+#include "FairRun.h"
+#include "FairRuntimeDb.h"
+
+#include "ShipDetectorList.h"
+#include "ShipUnit.h"
+#include "ShipStack.h"
+
+#include "TGeoUniformMagField.h"
+#include <stddef.h>                     // for NULL
+#include <iostream>    
 
 ClassImp(PixelDetector)
 
@@ -56,39 +102,38 @@ using std::endl;
 
 using namespace ShipUnit;
 
-PixelDetector::PixelPixelDetector() : 
-FairDetector("Pixel", kTRUE, kPixelDetector),
+PixelDetector::PixelDetector() : FairDetector("PixelDetector", kTRUE, kPixelDetector),
 fTrackID(-1),
 fVolumeID(-1),
 fPos(),
 fMom(),
 fTime(-1.),
 fLength(-1.),
-fELoss(-1),
+fELoss(-1.),
 fPixelDetectorPointCollection(new TClonesArray("PixelDetectorPoint"))
 {}
 
 PixelDetector::PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Double_t PZ,
-             const Double_t zPixel, Bool_t Active, const char* Title)
-: FairDetector(name, Active, kPixelDetector),
+             /*const Double_t zPixel,*/ Bool_t Active, const char* Title): FairDetector(name, Active, kPixelDetector),
   fTrackID(-1),
   fVolumeID(-1),
   fPos(),
   fMom(),
   fTime(-1.),
   fLength(-1.),
-  fELoss(-1),
-  fPixelPointCollection(new TClonesArray("PixelDetectorPoint"))
+  fELoss(-1.),
+  fPixelDetectorPointCollection(new TClonesArray("PixelDetectorPoint"))
 {
     PixelX = PX;
     PixelY = PY;
     PixelZ = PZ;
-    ZPixelPosition = zPixel;
-    PixInterStation1 = 10.;
-    PixInterStation2 = 10;
+    //ZPixelPosition = zPixel;
+    //PixInterStationX = 10.;
+    //PixInterStationY = 10.;
 }
 
-void Pixel::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
+
+/*void PixelDetector::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
 { 
  zs0 = zSi0;
  zs1 = zSi1;
@@ -97,33 +142,33 @@ void Pixel::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, 
  zs4 = zSi4;
  zs5 = zSi5;
  pairwisedistance = PairSiDistance;
-}
+}*/
+//Done in the python geometry building
 
-Pixel::~Pixel()
+PixelDetector::~PixelDetector()
 {
-    if (fPixelPointCollection) {
-        fPixelPointCollection->Delete();
-        delete fPixelPointCollection;
+    if (fPixelDetectorPointCollection) {
+        fPixelDetectorPointCollection->Delete();
+        delete fPixelDetectorPointCollection;
     }
 }
 
-void Pixel::Initialize()
+void PixelDetector::Initialize()
 {
     FairDetector::Initialize();
 }
 
-void Pixel::SetPixelPlaneParam(Double_t PlX, Double_t PlY, Double_t PlZ, Double_t Dist1, Double_t Dist2 )
+void PixelDetector::SetPixelPlaneParam(Double_t PlX, Double_t PlY, Double_t PlZ, Double_t Dist1, Double_t Dist2 )
 {
-    PixInterStation1 = Dist1;
-    PixInterStation2 = Dist2;
+    PixInterStationX = Dist1;
+    PixInterStationY = Dist2;
     PixPlaneX = PlX;
     PixPlaneY = PlY;
-    PixPlaneZ = PlZ;
 }
 
 
 // -----   Private method InitMedium
-Int_t Pixel::InitMedium(const char* name)
+Int_t PixelDetector::InitMedium(const char* name)
 {
     static FairGeoLoader *geoLoad=FairGeoLoader::Instance();
     static FairGeoInterface *geoFace=geoLoad->getGeoInterface();
@@ -143,7 +188,7 @@ Int_t Pixel::InitMedium(const char* name)
 
 
 
-void Pixel::ConstructGeometry()
+void PixelDetector::ConstructGeometry()
 {
     
     fLogger=FairLogger::GetLogger();
@@ -169,15 +214,16 @@ void Pixel::ConstructGeometry()
     TGeoVolume *top= gGeoManager->GetTopVolume(); 
 
 
-    Double_t pixStationThickness=0.6*cm;
-    Double_t pixInterStation1= PixInterStation1;  //VK 15.6*cm;
-    Double_t pixInterStation2= PixInterStation2;  //VK 26.9*cm;
-    Double_t CuSheetZ = 0.01*cm;
-    Double_t distCopperSilicon = 0.1*cm;
+    Double_t pixStationThickness=0.02*cm;
+    //Double_t PixInterStationx= PixInterStationX;  //VK 15.6*cm;
+    //Double_t PixInterStationy= PixInterStationY;  //VK 26.9*cm;
+    
+    //Double_t CuSheetZ = 0.01*cm;
+    //Double_t distCopperSilicon = 0.1*cm;
 
       //starting to simulate SHiP charm Pixel detector
    
-    TGeoBBox   *bPixel   = new TGeoBBox("Pixel", PixelX/2, PixelY/2, PixelZ/2); 
+    TGeoBBox   *bPixel   = new TGeoBBox("PixelDetector", PixelX/2, PixelY/2, PixelZ/2); 
     TGeoVolume *volPixel = new TGeoVolume("volPixel", bPixel, vacuum); 
     //volPixel->SetTransparency(1);
     volPixel->SetLineColor(kGreen);
@@ -191,13 +237,13 @@ void Pixel::ConstructGeometry()
     TGeoBBox *bPixPlaneX = new TGeoBBox("PixelPlaneX", PixPlaneX/2, PixPlaneY/2, PixPlaneZ/2);
     TGeoBBox *bPixPlaneY = new TGeoBBox("PixelPlaneY", PixPlaneY/2, PixPlaneX/2, PixPlaneZ/2);
     TGeoBBox *bBigPlane= new TGeoBBox("BigPlane", 2.*cm, 2.*cm, PixPlaneZ/2);  //--VK for acceptance test
-    TGeoBBox *bCuSheetX  = new TGeoBBox("CuSheetX",    PixPlaneX/2, PixPlaneY/2, CuSheetZ/2);
-    TGeoBBox *bCuSheetY  = new TGeoBBox("CuSheetY",    PixPlaneY/2, PixPlaneX/2, CuSheetZ/2);
+    //TGeoBBox *bCuSheetX  = new TGeoBBox("CuSheetX",    PixPlaneX/2, PixPlaneY/2, CuSheetZ/2);
+    //TGeoBBox *bCuSheetY  = new TGeoBBox("CuSheetY",    PixPlaneY/2, PixPlaneX/2, CuSheetZ/2);
     TGeoVolume *volPixPlaneX = new TGeoVolume("volPixelPlaneX", bPixPlaneX, silicon);
     TGeoVolume *volPixPlaneY = new TGeoVolume("volPixelPlaneY", bPixPlaneY, silicon);
     TGeoVolume *volBigPlane  = new TGeoVolume("volBigPlane", bBigPlane, silicon); //--VK for acceptance test
-    TGeoVolume *volCuSheetX  = new TGeoVolume("volCuSheetX", bCuSheetX, copper);
-    TGeoVolume *volCuSheetY  = new TGeoVolume("volCuSheetY", bCuSheetY, copper);
+    //TGeoVolume *volCuSheetX  = new TGeoVolume("volCuSheetX", bCuSheetX, copper);
+    //TGeoVolume *volCuSheetY  = new TGeoVolume("volCuSheetY", bCuSheetY, copper);
     volPixPlaneX->SetLineColor(kRed);
     volPixPlaneX->SetVisibility(kTRUE);
     AddSensitiveVolume(volPixPlaneX);
@@ -208,10 +254,10 @@ void Pixel::ConstructGeometry()
     volBigPlane->SetLineColor(kOrange);
     volBigPlane->SetVisibility(kTRUE);
     AddSensitiveVolume(volBigPlane); //--VK for acceptance test
+/*
+    //Int_t npixelplane=2;        //VK Pixel plane replica counter
 
-    Int_t npixelplane=2;        //VK Pixel plane replica counter
-
-    Double_t zPixPlanePos = -PixelZ/2+CuSheetZ/2.; //npixelplane++;
+    //Double_t zPixPlanePos = -PixelZ/2+CuSheetZ/2.; //npixelplane++;
     //volPixel->AddNode(volCuSheetX, 0,  new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
     //zPixPlanePos+=distCopperSilicon+PixPlaneZ/2;
     //volPixel->AddNode(volPixPlaneX,0, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
@@ -219,29 +265,29 @@ void Pixel::ConstructGeometry()
     //volPixel->AddNode(volTestTarget,0, new TGeoTranslation(0.,0., zPixPlanePos+thickTestTarget/2.));               //--VK for acceptance test
     //volPixel->AddNode(volBigPlane,0,   new TGeoTranslation(0.,0., zPixPlanePos+thickTestTarget+5.*cm+PixPlaneZ/2));//--VK for acceptance test
     //--
-    volPixel->AddNode(volBigPlane,0,   new TGeoTranslation(0.,0., zPixPlanePos+PixPlaneZ/2))         ;//--VK for acceptance test
-    volPixel->AddNode(volBigPlane,1,   new TGeoTranslation(0.,0., zPixPlanePos+PixPlaneZ/2 + 5.*cm)); //--VK for acceptance test
-    volPixel->AddNode(volBigPlane,2,   new TGeoTranslation(0.,0., zPixPlanePos+PixPlaneZ/2 +15.*cm)); //--VK for acceptance test npixelplane should be 2!!!
+    //volPixel->AddNode(volBigPlane,0,   new TGeoTranslation(0.,0., zPixPlanePos+PixPlaneZ/2))         ;//--VK for acceptance test
+    //volPixel->AddNode(volBigPlane,1,   new TGeoTranslation(0.,0., zPixPlanePos+PixPlaneZ/2 + 5.*cm)); //--VK for acceptance test
+    //volPixel->AddNode(volBigPlane,2,   new TGeoTranslation(0.,0., zPixPlanePos+PixPlaneZ/2 +15.*cm)); //--VK for acceptance test npixelplane should be 2!!!
     //======================================================================
-    zPixPlanePos+=pixInterStation1; npixelplane++;
-    volPixel->AddNode(volPixPlaneX, npixelplane, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
-    zPixPlanePos+=distCopperSilicon+CuSheetZ/2;
-    volPixel->AddNode(volCuSheetX,  npixelplane, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
+    //zPixPlanePos+=pixInterStationX;
+    //volPixel->AddNode(volPixPlaneX, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
+    //zPixPlanePos+=distCopperSilicon+CuSheetZ/2;
+    //volPixel->AddNode(volCuSheetX,  npixelplane, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
 
-    zPixPlanePos+=pixStationThickness; npixelplane++;
-    volPixel->AddNode(volCuSheetY,  npixelplane, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));
-    zPixPlanePos+=distCopperSilicon+PixPlaneZ/2;
-    volPixel->AddNode(volPixPlaneY, npixelplane, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));
+    //zPixPlanePos+=pixStationThickness; 
+    //volPixel->AddNode(volCuSheetY, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));
+    //zPixPlanePos+=distCopperSilicon+PixPlaneZ/2;
+    //volPixel->AddNode(volPixPlaneY, npixelplane, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));
     //====
-    zPixPlanePos+=pixInterStation2;    npixelplane++;
-    volPixel->AddNode(volPixPlaneX, npixelplane, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
+    zPixPlanePos+=pixInterStationY;    
+    volPixel->AddNode(volPixPlaneX, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
     zPixPlanePos+=distCopperSilicon+CuSheetZ/2;
     volPixel->AddNode(volCuSheetX,  npixelplane, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
 
     zPixPlanePos+=pixStationThickness; npixelplane++;
-    volPixel->AddNode(volCuSheetY,  npixelplane, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));    
+    volPixel->AddNode(volCuSheetY, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));    
     zPixPlanePos+=distCopperSilicon+PixPlaneZ/2;
-    volPixel->AddNode(volPixPlaneY, npixelplane, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));    
+    volPixel->AddNode(volPixPlaneY, new TGeoTranslation(0.,PixPlaneX/4., zPixPlanePos));    */
 }
      
     
@@ -250,7 +296,7 @@ void Pixel::ConstructGeometry()
 
 
 
-Bool_t  Pixel::ProcessHits(FairVolume* vol)
+Bool_t  PixelDetector::ProcessHits(FairVolume* vol)
 {
     /** This method is called from the MC stepping */
     //Set parameters at entrance of volume. Reset ELoss.
@@ -264,7 +310,7 @@ Bool_t  Pixel::ProcessHits(FairVolume* vol)
     // Sum energy loss for all steps in the active volume
     fELoss += gMC->Edep();
     
-    // Create PixelPoint at exit of active volume
+    // Create PixelDetectorPoint at exit of active volume
     if ( gMC->IsTrackExiting()    ||
         gMC->IsTrackStop()       ||
         gMC->IsTrackDisappeared()   ) {
@@ -294,7 +340,7 @@ Bool_t  Pixel::ProcessHits(FairVolume* vol)
 	
         // Increment number of Pixel det points in TParticle
         ShipStack* stack = (ShipStack*) gMC->GetStack();
-        stack->AddPoint(kPixel);
+        stack->AddPoint(kPixelDetector);
     }
     
     return kTRUE;
@@ -302,13 +348,13 @@ Bool_t  Pixel::ProcessHits(FairVolume* vol)
 
 
 
-void Pixel::EndOfEvent()
+void PixelDetector::EndOfEvent()
 {
-    fPixelPointCollection->Clear();
+    fPixelDetectorPointCollection->Clear();
 }
 
 
-void Pixel::Register()
+void PixelDetector::Register()
 {
     
     /** This will create a branch in the output tree called
@@ -317,41 +363,41 @@ void Pixel::Register()
      only during the simulation.
      */
     
-    FairRootManager::Instance()->Register("PixelPoint", "Pixel",
-                                          fPixelPointCollection, kTRUE);
+    FairRootManager::Instance()->Register("PixelDetectorPoint", "PixelDetector",
+                                          fPixelDetectorPointCollection, kTRUE);
 }
 // -----   Public method to Decode volume info  -------------------------------------------
 // -----   returns hpt, arm, rpc numbers -----------------------------------
-void Pixel::DecodeVolumeID(Int_t detID,int &nHPT)
+void PixelDetector::DecodeVolumeID(Int_t detID,int &nHPT)
 {
   nHPT = detID;
 }
 
-TClonesArray* Pixel::GetCollection(Int_t iColl) const
+TClonesArray* PixelDetector::GetCollection(Int_t iColl) const
 {
-    if (iColl == 0) { return fPixelPointCollection; }
+    if (iColl == 0) { return fPixelDetectorPointCollection; }
     else { return NULL; }
 }
 
-void Pixel::Reset()
+void PixelDetector::Reset()
 {
-    fPixelPointCollection->Clear();
+    fPixelDetectorPointCollection->Clear();
 }
 
 
-PixelPoint* Pixel::AddHit(Int_t trackID,Int_t detID,
+PixelDetectorPoint* PixelDetector::AddHit(Int_t trackID,Int_t detID,
                            TVector3 pos, TVector3 mom,
                            Double_t time, Double_t length,
 			    Double_t eLoss, Int_t pdgCode)
 {
-    TClonesArray& clref = *fPixelPointCollection;
+    TClonesArray& clref = *fPixelDetectorPointCollection;
     Int_t size = clref.GetEntriesFast();
 
-    return new(clref[size]) PixelPoint(trackID,detID, pos, mom,
+    return new(clref[size]) PixelDetectorPoint(trackID,detID, pos, mom,
 					time, length, eLoss, pdgCode);
 }
 
-ClassImp(Pixel)
+ClassImp(PixelDetector)
 
 
 

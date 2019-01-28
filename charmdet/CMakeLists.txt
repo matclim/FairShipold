@@ -38,6 +38,8 @@ Scintillator.cxx
 ScintillatorPoint.cxx
 ScintillatorHit.cxx
 ReProcessAbsorber.cxx
+PixelDetector.cxx
+PixelDetectorPoint.cxx
 )
 
 Set(HEADERS )
