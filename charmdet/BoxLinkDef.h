@@ -19,9 +19,8 @@
 #pragma link C++ class ScintillatorPoint+;
 #pragma link C++ class ScintillatorHit+;
 #pragma link C++ class ReProcessAbsorber+;
-#pragma link C++ class PixelDetector;
-#pragma link C++ class PixelDetectorPoint;
-
+#pragma link C++ class PixelDetector+;
+#pragma link C++ class PixelDetectorPoint+;
 
 #endif
 
