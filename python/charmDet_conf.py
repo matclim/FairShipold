@@ -50,7 +50,7 @@ def configure(run,ship_geo):
  PixelDetector = ROOT.PixelDetector("PixelDetector",ship_geo.PixelDetector.PX, ship_geo.PixelDetector.PY, ship_geo.PixelDetector.PZ,ROOT.kTRUE, ship_geo.PixelDetector.NPixelPlanes)
  for Pixelplanenb in range(ship_geo.PixelDetector.NPixelPlanes):
  	exec('PixelPlanePosition' + '=' + 'zSi_' + str(Pixelplanenb))
- 	PixelDetector.SetSiliconDetPositions(ship_geo.PixelDetector.locals()[PixelPLanePosition], ship_geo.PixelDetector.PairSiDistance)
+ 	PixelDetector.SetSiliconDetPositions(ship_geo.PixelDetector.locals()[PixelPlanePosition], ship_geo.PixelDetector.PairSiDistance)
 
 #-----End Pixel Detector-----
 
