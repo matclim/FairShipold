@@ -249,8 +249,8 @@ with ConfigRegistry.register_config("basic") as c:
     c.Spectrometer.D1Long = 4 * u.cm;   
     c.Spectrometer.DimZSi = 0.0200 * u.cm
     
-
-    c.PixelDetector.PairSiDistance = 0.600 * u.cm +c.PixelDetector.DimZSi
+    c.PixelDetector = AttrDict(z = 0*u.cm)
+    c.PixelDetector.PairSiDistance = 0.600 * u.cm +c.Spectrometer.DimZSi
     c.PixelDetector.PixIntersectionX = 0 #0.2*u.cm
     c.PixelDetector.PixIntersectionY = 0 #0.2*u.cm   
      
@@ -259,14 +259,15 @@ with ConfigRegistry.register_config("basic") as c:
     c.PixelDetector.NPixelPlanes = 6
     c.PixelDetector.NPixelModulesperPlane=2
     c.PixelDetector.PX = 336
-    c.PixelDetector.PY = 160 
+    c.PixelDetector.PY = 160
+    c.PixelDetector.PZ = 1 
     #position of module centres, variable names must be reformatted to [x/y/z]Si_Planenumber
-    c.PixelDetector.zSi_0 = c.Spectrometer.PairSiDistance/2. + c.Spectrometer.DimZSi/2. + c.Box.GapPostTargetTh
-    c.PixelDetector.zSi_1 = c.Spectrometer.zSi0 + 2.70 *u.cm
-    c.PixelDetector.zSi_2 = c.Spectrometer.zSi1 + 2.54 *u.cm
-    c.PixelDetector.zSi_3 = c.Spectrometer.zSi2 + 2.70 *u.cm
-    c.PixelDetector.zSi_4 = c.Spectrometer.zSi3 + 2.54 *u.cm
-    c.PixelDetector.zSi_5 = c.Spectrometer.zSi4 + 2.70 *u.cm    
+    c.PixelDetector.zSi_0 = c.PixelDetector.PairSiDistance/2. + c.Spectrometer.DimZSi/2. + c.Box.GapPostTargetTh
+    c.PixelDetector.zSi_1 = c.PixelDetector.zSi_0 + 2.70 *u.cm
+    c.PixelDetector.zSi_2 = c.PixelDetector.zSi_1 + 2.54 *u.cm
+    c.PixelDetector.zSi_3 = c.PixelDetector.zSi_2 + 2.70 *u.cm
+    c.PixelDetector.zSi_4 = c.PixelDetector.zSi_3 + 2.54 *u.cm
+    c.PixelDetector.zSi_5 = c.PixelDetector.zSi_4 + 2.70 *u.cm    
 
     c.Spectrometer.DSciFi1X = 40 * u.cm;
     c.Spectrometer.DSciFi1Y = 40 * u.cm;
@@ -286,18 +287,17 @@ with ConfigRegistry.register_config("basic") as c:
     #c.Scintillator.DistT2              = 135.25*u.cm
     c.Scintillator.DistT2              = 136.26*u.cm 
                   
-    c.Spectrometer.SZ = c.PixelDetector.DZ*2 + c.PixelDetector.zSi5 - c.PixelDetector.zSi0 + c.PixelDetector.PairSiDistance + c.PixelDetector.DimZSi + 80 *u.cm + 4.5*u.m #4.5 m is the Goliath length + 80 *u.cm + 4.5*u.m #4.5 m is the Goliath length
+    c.Spectrometer.SZ = c.Spectrometer.DZ*2 + c.PixelDetector.zSi_5 - c.PixelDetector.zSi_0 + c.PixelDetector.PairSiDistance + c.Spectrometer.DimZSi + 80 *u.cm + 4.5*u.m #4.5 m is the Goliath length + 80 *u.cm + 4.5*u.m #4.5 m is the Goliath length
    
-    c.PixelDetector.DimZpixelbox = c.Box.GapPostTargetTh + c.PixelDetector.zSi5 - c.PixelDetector.zSi0 + c.PixelDetector.PairSiDistance + c.PixelDetector.DimZSi
-    
+    c.PixelDetector.DimZpixelbox=c.PixelDetector.zSi_5 - c.PixelDetector.zSi_1 + c.Spectrometer.DimZSi 
     PixeltoGoliath = 30.45 *u.cm #25.45 + 5cm different goliath dz
-    c.Spectrometer.zBox = 350.75 - c.Spectrometer.TS/2 - PixeltoGoliath - c.Spectrometer.DimZpixelbox/2.
-    c.Box.zBox = c.Spectrometer.zBox - c.Spectrometer.DimZpixelbox/2. 
+    c.Spectrometer.zBox = 350.75 - c.Spectrometer.TS/2 - PixeltoGoliath - c.PixelDetector.DimZpixelbox/2.
+    c.Box.zBox = c.Spectrometer.zBox - c.PixelDetector.DimZpixelbox/2. 
 
     #position of SciFis 
     distGoliathSciFi1 = 10*u.cm
     c.Spectrometer.Scifidist = 5 * u.cm   
-    c.Spectrometer.zSciFi1 = c.Spectrometer.zBox + c.Spectrometer.DimZpixelbox/2. + PixeltoGoliath + c.Spectrometer.TS + distGoliathSciFi1 +  c.Spectrometer.DZ/2.
+    c.Spectrometer.zSciFi1 = c.Spectrometer.zBox + c.PixelDetector.DimZpixelbox/2. + PixeltoGoliath + c.Spectrometer.TS + distGoliathSciFi1 +  c.Spectrometer.DZ/2.
     c.Spectrometer.zSciFi2 = c.Spectrometer.zSciFi1 + c.Spectrometer.DZ/2. + c.Spectrometer.Scifidist + c.Spectrometer.DZ/2.
 
     #Muon Filter
@@ -350,7 +350,7 @@ with ConfigRegistry.register_config("basic") as c:
        #c.MuonTagger.zBox = 791.*u.cm  + 173.67755*u.cm
        c.MuonTagger.zBox = 791.*u.cm  + 175.9875*u.cm
     else:    
-       c.MuonTagger.zBox = c.Spectrometer.zBox + c.Spectrometer.DimZpixelbox/2. + PixeltoGoliath + c.Spectrometer.TS + 261*u.cm + c.MuonTagger.BZ/2. #real position of MuonTagger
+       c.MuonTagger.zBox = c.Spectrometer.zBox + c.PixelDetector.DimZpixelbox/2. + PixeltoGoliath + c.Spectrometer.TS + 261*u.cm + c.MuonTagger.BZ/2. #real position of MuonTagger
 
     c.MuonTagger.PX = c.MuonTagger.BX
     c.MuonTagger.PY = c.MuonTagger.BY
