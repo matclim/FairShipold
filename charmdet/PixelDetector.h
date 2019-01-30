@@ -48,7 +48,7 @@ PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Doub
     void ConstructGeometry();  
     void SetPixelPlaneParam(Double_t X, Double_t Y, Double_t Z, Double_t Dist1, Double_t Dist2);
     void SetSiliconDZ(Double_t SiliconDZ);
-    void SetSiliconDetPositions(Double_t zSi, Double_t PairSiDistance);
+    void SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance);
     void SetSiliconDetAngles(Double_t Si_ang_zx, Double_t Si_ang_yz, Double_t Si_ang_xz);
     /**      Initialization of the detector is done here    */
     virtual void Initialize();
@@ -96,12 +96,13 @@ protected:
 
     //Pixel detector
     
-    Double_t   PixelX;
-    Double_t   PixelY;
-    Double_t   PixelZ;
+    Double_t   PixX=0;
+    Double_t   PixY=0;
+    Double_t   PixZ=0;
     /*Double_t   XPixelPosition;
     Double_t   YPixelPosition;*/
     Double_t   ZPixelPosition;
+    Double_t   PairSiDistance;
     
     Int_t InitMedium(const char* name);
     
@@ -112,12 +113,19 @@ protected:
   
          
     //attributes for the pixel plane
+    Double_t zSi_0;
+    Double_t zSi_1;
+    Double_t zSi_2;
+    Double_t zSi_3;
+    Double_t zSi_4;
+    Double_t zSi_5;
     Double_t PixPlaneX;
     Double_t PixPlaneY;
     Double_t PixPlaneZ;
     Double_t Pixel_ang_xy;
     Double_t Pixel_ang_yz;
     Double_t Pixel_ang_zx;
+	Double_t DimZpixelbox
 	Double_t PixInterStationX = 10.;
     Double_t PixInterStationY = 10.;
     Int_t NPixelModulesperPLane;

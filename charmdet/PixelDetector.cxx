@@ -124,25 +124,25 @@ PixelDetector::PixelDetector(const char* name, const Double_t PX, const Double_t
   fELoss(-1.),
   fPixelDetectorPointCollection(new TClonesArray("PixelDetectorPoint"))
 {
-    PixelX = PX;
-    PixelY = PY;
-    PixelZ = PZ;
+    PixX = PX;
+    PixY = PY;
+    PixZ = PZ;
     //ZPixelPosition = zPixel;
     //PixInterStationX = 10.;
     //PixInterStationY = 10.;
 }
 
 
-/*void PixelDetector::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
+void PixelDetector::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
 { 
- zs0 = zSi0;
- zs1 = zSi1;
- zs2 = zSi2;
- zs3 = zSi3;
- zs4 = zSi4;
- zs5 = zSi5;
- pairwisedistance = PairSiDistance;
-}*/
+ zSi_0 = zSi0;
+ zSi_1 = zSi1;
+ zSi_2 = zSi2;
+ zSi_3 = zSi3;
+ zSi_4 = zSi4;
+ zSi_5 = zSi5;
+ PairSiDistance = PairSiDistance;
+}
 //Done in the python geometry building
 
 PixelDetector::~PixelDetector()
@@ -223,7 +223,7 @@ void PixelDetector::ConstructGeometry()
 
       //starting to simulate SHiP charm Pixel detector
    
-    TGeoBBox   *bPixel   = new TGeoBBox("PixelDetector", PixelX/2, PixelY/2, PixelZ/2); 
+    TGeoBBox   *bPixel   = new TGeoBBox("PixelDetector", PixX/2, PixY/2, PixZ); 
     TGeoVolume *volPixel = new TGeoVolume("volPixel", bPixel, vacuum); 
     //volPixel->SetTransparency(1);
     volPixel->SetLineColor(kGreen);
@@ -231,7 +231,7 @@ void PixelDetector::ConstructGeometry()
     top->AddNode(volPixel,1,new TGeoTranslation(0,0,ZPixelPosition));
   
     Double_t thickTestTarget = 18.248*cm*1.0;
-    TGeoBBox *bTestTarget     = new TGeoBBox("TestTarget", PixelX/2, PixelY/2, thickTestTarget/2.); 
+    TGeoBBox *bTestTarget     = new TGeoBBox("TestTarget", PixX/2, PixY/2, thickTestTarget/2.); 
     TGeoVolume *volTestTarget = new TGeoVolume("volTestTarget", bTestTarget, lead);
 
     TGeoBBox *bPixPlaneX = new TGeoBBox("PixelPlaneX", PixPlaneX/2, PixPlaneY/2, PixPlaneZ/2);
@@ -257,7 +257,7 @@ void PixelDetector::ConstructGeometry()
 /*
     //Int_t npixelplane=2;        //VK Pixel plane replica counter
 
-    //Double_t zPixPlanePos = -PixelZ/2+CuSheetZ/2.; //npixelplane++;
+    //Double_t zPixPlanePos = -PZ/2+CuSheetZ/2.; //npixelplane++;
     //volPixel->AddNode(volCuSheetX, 0,  new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
     //zPixPlanePos+=distCopperSilicon+PixPlaneZ/2;
     //volPixel->AddNode(volPixPlaneX,0, new TGeoTranslation(PixPlaneX/4.,0., zPixPlanePos));
