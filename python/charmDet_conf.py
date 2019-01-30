@@ -42,17 +42,19 @@ def configure(run,ship_geo):
  Box.SetTargetDesign(ship_geo.Box.Julytarget)
  Box.SetRunNumber(ship_geo.Box.RunNumber)
 
- if (ship_geo.MufluxSpectrometer.muflux==False): 
-    detectorList.append(Box)
-   
-#-----Pixel Detector-----
 
+#-----Pixel Detector-----
+ 
  PixelDetector = ROOT.PixelDetector("PixelDetector",ship_geo.PixelDetector.PX, ship_geo.PixelDetector.PY, ship_geo.PixelDetector.PZ,ROOT.kTRUE, ship_geo.PixelDetector.NPixelPlanes)
  for Pixelplanenb in range(ship_geo.PixelDetector.NPixelPlanes):
  	exec('PixelPlanePosition' + '=' + 'zSi_' + str(Pixelplanenb))
  	PixelDetector.SetSiliconDetPositions(ship_geo.PixelDetector.locals()[PixelPlanePosition], ship_geo.PixelDetector.PairSiDistance)
 
 #-----End Pixel Detector-----
+
+ if (ship_geo.MufluxSpectrometer.muflux==False): 
+    detectorList.append(Box)
+    detectorList.append(PixelDetector)
 
  Spectrometer = ROOT.Spectrometer("Spectrometer",ship_geo.Spectrometer.DX, ship_geo.Spectrometer.DY, ship_geo.Spectrometer.DZ,ROOT.kTRUE)
  Spectrometer.SetTransverseSizes(ship_geo.Spectrometer.D1Short, ship_geo.Spectrometer.D1Long, ship_geo.Spectrometer.Sioverlap, ship_geo.Spectrometer.DSciFi1X, ship_geo.Spectrometer.DSciFi1Y, ship_geo.Spectrometer.DSciFi2X, ship_geo.Spectrometer.DSciFi2Y)   
