@@ -258,9 +258,9 @@ with ConfigRegistry.register_config("basic") as c:
     c.Spectrometer.SY = c.Spectrometer.DY    
     c.PixelDetector.NPixelPlanes = 6
     c.PixelDetector.NPixelModulesperPlane=2
-    c.PixelDetector.PX = 336
-    c.PixelDetector.PY = 160
-    c.PixelDetector.PZ = 1 
+    c.PixelDetector.PX = 2
+    c.PixelDetector.PY = 1.68
+    c.PixelDetector.PZ = 0.02
     #position of module centres, variable names must be reformatted to [x/y/z]Si_Planenumber
     c.PixelDetector.zSi_0 = c.PixelDetector.PairSiDistance/2. + c.Spectrometer.DimZSi/2. + c.Box.GapPostTargetTh
     c.PixelDetector.zSi_1 = c.PixelDetector.zSi_0 + 2.70 *u.cm

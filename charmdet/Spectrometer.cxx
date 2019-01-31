@@ -112,14 +112,13 @@ Int_t Spectrometer::InitMedium(const char* name)
    return geoBuild->createMedium(ShipMedium);
 }
 
-void Spectrometer::SetBoxParam(Double_t SX, Double_t SY, Double_t SZ, Double_t zBox, Double_t SZPixel)
+void Spectrometer::SetBoxParam(Double_t SX, Double_t SY, Double_t SZ, Double_t zBox)
 {
   SBoxX = SX;
   SBoxY = SY;
   SBoxZ = SZ;
   zBoxPosition = zBox;
-  DimZPixelBox = SZPixel;
-}
+ }
 
 //void Spectrometer::SetSiliconDZ(Double_t SiliconDZ)
 //{
@@ -134,94 +133,14 @@ void Spectrometer::SetSciFiDetPositions(Double_t zSciFi1, Double_t zSciFi2)
  zposSciFi2 = zSciFi2;
 }
 
-void Spectrometer::SetSiliconDetNumber(Int_t nSilicon)
-{
- nSi = nSilicon;
-}
 
 
-void Spectrometer::SetTransverseSizes(Double_t D1short, Double_t D1long, Double_t Sioverlap, Double_t DSciFi1X, Double_t DSciFi1Y, Double_t DSciFi2X, Double_t DSciFi2Y){
+void Spectrometer::SetTransverseSizes(Double_t D1short, Double_t D1long, Double_t DSciFi1X, Double_t DSciFi1Y, Double_t DSciFi2X, Double_t DSciFi2Y){
   Dim1Short = D1short;
   Dim1Long = D1long;
-  overlap = Sioverlap;
-  DimSciFi1X = DSciFi1X;
-  DimSciFi1Y = DSciFi1Y;
-  DimSciFi2X = DSciFi2X;
-  DimSciFi2Y = DSciFi2Y;
-}   
 
 
-//Methods for Goliath by Annarita
-void Spectrometer::SetGoliathSizes(Double_t H, Double_t TS, Double_t LS, Double_t BasisH)
-{
-    LongitudinalSize = LS;
-    TransversalSize = TS;
-    Height = H;
-    BasisHeight = BasisH;
-}
 
-void Spectrometer::SetCoilParameters(Double_t CoilR, Double_t UpCoilH, Double_t LowCoilH, Double_t CoilD)
-{
-    CoilRadius = CoilR;
-    UpCoilHeight = UpCoilH;
-    LowCoilHeight = LowCoilH;
-    CoilDistance = CoilD;
-}
-//
-void Spectrometer::ConstructGeometry()
-{ 
-    InitMedium("air");
-  TGeoMedium *air = gGeoManager->GetMedium("air");
-
-    InitMedium("iron");
-    TGeoMedium *Fe =gGeoManager->GetMedium("iron");
-    
-    InitMedium("silicon");
-    TGeoMedium *Silicon = gGeoManager->GetMedium("silicon");
-
-    InitMedium("CoilCopper");
-    TGeoMedium *Cu  = gGeoManager->GetMedium("CoilCopper");
-
-    InitMedium("CoilAluminium");
-    TGeoMedium *Al  = gGeoManager->GetMedium("CoilAluminium");
-
-    InitMedium("TTmedium");
-    TGeoMedium *TT  = gGeoManager->GetMedium("TTmedium");
-    
-    InitMedium("STTmix8020_2bar");
-    TGeoMedium *sttmix8020_2bar   = gGeoManager->GetMedium("STTmix8020_2bar");
-  
-  TGeoVolume *top = gGeoManager->GetTopVolume();
-
-
-    //Double_t DimZPixelBox = zs5 -zs0 +pairwisedistance + DimZSi;
-    TGeoBBox *PixelBox = new TGeoBBox("PixelBox", Dim1Long/2 + overlap, Dim1Long/2 + overlap, DimZPixelBox/2.);
-    TGeoVolume *volPixelBox = new TGeoVolume("volPixelBox",PixelBox,air);
-
-    top->AddNode(volPixelBox, 1, new TGeoTranslation(0,0,zBoxPosition));
-
-    TGeoBBox *Pixely = new TGeoBBox("Pixely", Dim1Short/2, Dim1Long/2, DimZSi/2); //long along y
-    TGeoVolume *volPixely = new TGeoVolume("volPixely",Pixely,Silicon); 
-    volPixely->SetLineColor(kBlue-5);
-    AddSensitiveVolume(volPixely);
-
-    TGeoBBox *Pixelx = new TGeoBBox("Pixelx", (Dim1Long)/2, (Dim1Short)/2, DimZSi/2); //long along x
-    TGeoVolume *volPixelx = new TGeoVolume("volPixelx",Pixelx,Silicon); 
-    volPixelx->SetLineColor(kBlue-5);
-    AddSensitiveVolume(volPixelx);
-
-    volPixelBox->AddNode(volPixely, 111, new TGeoTranslation(overlap - Dim1Short/2.,0,-DimZPixelBox/2.+ zs0 - pairwisedistance/2));
-    volPixelBox->AddNode(volPixely, 112, new TGeoTranslation(-overlap + Dim1Short/2.,0,-DimZPixelBox/2. + zs0 + pairwisedistance/2));
-    volPixelBox->AddNode(volPixelx, 121, new TGeoTranslation(0,overlap - Dim1Short/2.,-DimZPixelBox/2.  + zs1 - pairwisedistance/2)); 
-    volPixelBox->AddNode(volPixelx, 122, new TGeoTranslation(0,-overlap + Dim1Short/2.,-DimZPixelBox/2.  +  zs1 + pairwisedistance/2)); 
-    volPixelBox->AddNode(volPixely, 131, new TGeoTranslation(overlap - Dim1Short/2.,0,-DimZPixelBox/2. + zs2 - pairwisedistance/2));
-    volPixelBox->AddNode(volPixely, 132, new TGeoTranslation(-overlap + Dim1Short/2.,0,-DimZPixelBox/2. +  zs2 + pairwisedistance/2));
-    volPixelBox->AddNode(volPixelx, 141, new TGeoTranslation(0,overlap - Dim1Short/2. ,-DimZPixelBox/2. +  zs3 - pairwisedistance/2)); 
-    volPixelBox->AddNode(volPixelx, 142, new TGeoTranslation(0,-overlap + Dim1Short/2.,-DimZPixelBox/2. + zs3 + pairwisedistance/2)); 
-    volPixelBox->AddNode(volPixely, 151, new TGeoTranslation(overlap - Dim1Short/2.,0,-DimZPixelBox/2. + zs4 - pairwisedistance/2));
-    volPixelBox->AddNode(volPixely, 152, new TGeoTranslation(-overlap + Dim1Short/2.,0,-DimZPixelBox/2. + zs4 + pairwisedistance/2));
-    volPixelBox->AddNode(volPixelx, 161, new TGeoTranslation(0,overlap - Dim1Short/2.,-DimZPixelBox/2. + zs5 - pairwisedistance/2)); 
-    volPixelBox->AddNode(volPixelx, 162, new TGeoTranslation(0,-overlap + Dim1Short/2.,-DimZPixelBox/2. + zs5 + pairwisedistance/2)); 
     
     TGeoBBox *SciFi1 = new TGeoBBox("SciFi1", DimSciFi1X/2, DimSciFi1Y/2, DimZ/2); 
     TGeoVolume *subvolSciFi1 = new TGeoVolume("volSciFi1",SciFi1,sttmix8020_2bar);

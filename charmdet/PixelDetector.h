@@ -32,7 +32,7 @@ bool debug = false;
 
 PixelDetector();
 PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Double_t PZ, //Real particle position
-             /*const Double_t zPixel,*/ Bool_t Active, const char* Title = "PixelDetector");
+             /*const Double_t zPixel,*/ Bool_t Active, Int_t NPixelPlanes,const char* Title = "PixelDetector");
 
 
 //public:
@@ -75,7 +75,7 @@ PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Doub
     virtual void   PreTrack() {;}
     virtual void   BeginEvent() {;}
     void DecodeVolumeID(Int_t detID,int &nHPT);
-    
+    void SetSiliconDetNumber(Int_t nSilicon);
 private:
 
     /** Track information to be stored until the track leaves the active volume. */
@@ -128,6 +128,7 @@ protected:
     Double_t DimZpixelbox;
     Double_t PixInterStationX = 10.;
     Double_t PixInterStationY = 10.;
+    Int_t NPlanes;
     Int_t NPixelModulesperPLane;
     PixelDetector(const PixelDetector&);
     PixelDetector& operator=(const PixelDetector&);

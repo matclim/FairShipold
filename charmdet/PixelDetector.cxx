@@ -114,7 +114,7 @@ fPixelDetectorPointCollection(new TClonesArray("PixelDetectorPoint"))
 {}
 
 PixelDetector::PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Double_t PZ,
-             /*const Double_t zPixel,*/ Bool_t Active, const char* Title): FairDetector(name, Active, kPixelDetector),
+             /*const Double_t zPixel,*/ Bool_t Active, Int_t NPixelPlanes,const char* Title): FairDetector(name, Active, kPixelDetector),
   fTrackID(-1),
   fVolumeID(-1),
   fPos(),
@@ -127,11 +127,17 @@ PixelDetector::PixelDetector(const char* name, const Double_t PX, const Double_t
     PixX = PX;
     PixY = PY;
     PixZ = PZ;
+    NPlanes = NPixelPlanes;
     //ZPixelPosition = zPixel;
     //PixInterStationX = 10.;
     //PixInterStationY = 10.;
 }
 
+
+void PixelDetector::SetSiliconDetNumber(Int_t nSilicon)
+{
+ NPlanes = nSilicon;
+}
 
 void PixelDetector::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
 { 
