@@ -132,8 +132,17 @@ PixelDetector::PixelDetector(const char* name, const Double_t PX, const Double_t
     //PixInterStationY = 10.;
 }
 
+void PixelDetector::SetSiliconDZ(Double_t SiliconDZ)
+{
+ DimZSi = SiliconDZ;
+}
 
-/*void PixelDetector::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5, Double_t PairSiDistance)
+void PixelDetector::SetSiliconPlaneNumber(Int_t nSilicon)
+{
+ nSi = nSilicon;
+}
+
+void PixelDetector::SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5)
 { 
  zs0 = zSi0;
  zs1 = zSi1;
@@ -141,8 +150,7 @@ PixelDetector::PixelDetector(const char* name, const Double_t PX, const Double_t
  zs3 = zSi3;
  zs4 = zSi4;
  zs5 = zSi5;
- pairwisedistance = PairSiDistance;
-}*/
+}
 //Done in the python geometry building
 
 PixelDetector::~PixelDetector()

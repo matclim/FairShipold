@@ -45,13 +45,11 @@ class ConfigRegistry(dict):
 
     @staticmethod
     def loadpy(filename, **kwargs):
-	print('Registry filename is', filename, 'end of Registry filename')
         with open(expand_env(filename)) as fh:
             return ConfigRegistry.loadpys(fh.read(), **kwargs)
 
     @staticmethod
     def loadpys(config_string, **kwargs):
-	print('The config string is' ,config_string, 'end of config string')
         string_unixlf = config_string.replace('\r', '')
         exec(string_unixlf, kwargs)                             
         return ConfigRegistry.get_latest_config()
@@ -66,8 +64,6 @@ class ConfigRegistry(dict):
     @staticmethod
     @contextmanager
     def register_config(name=None, base=None):
-	print('registar name is ', name, 'registar name end')
-	print('registar location', contextmanager)
         registry = ConfigRegistry()
         if base is not None:
             assert base in registry, "no base configuration (%s) found in the registry" % base
@@ -121,7 +117,6 @@ class Config(AttrDict):
 
     def loads(self, buff):
         rv = cPickle.loads(buff)
-	print('rv is ',rv)
         self.clear()
         self.update(rv)
         return self
@@ -139,7 +134,6 @@ class Config(AttrDict):
         return cPickle.dumps(self)
 
     def load(self, filename):      
-    	print('filename is ', filename)
 	with open(expand_env(filename)) as fh:
             self.loads(fh.read())
         return self

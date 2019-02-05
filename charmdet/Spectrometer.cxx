@@ -121,10 +121,6 @@ void Spectrometer::SetBoxParam(Double_t SX, Double_t SY, Double_t SZ, Double_t z
   DimZPixelBox = SZPixel;
 }
 
-//void Spectrometer::SetSiliconDZ(Double_t SiliconDZ)
-//{
-// DimZSi = SiliconDZ;
-//}
 
 
 
@@ -134,16 +130,13 @@ void Spectrometer::SetSciFiDetPositions(Double_t zSciFi1, Double_t zSciFi2)
  zposSciFi2 = zSciFi2;
 }
 
-void Spectrometer::SetSiliconDetNumber(Int_t nSilicon)
-{
- nSi = nSilicon;
-}
 
 
-void Spectrometer::SetTransverseSizes(Double_t D1short, Double_t D1long, Double_t Sioverlap, Double_t DSciFi1X, Double_t DSciFi1Y, Double_t DSciFi2X, Double_t DSciFi2Y){
+
+void Spectrometer::SetTransverseSizes(Double_t D1short, Double_t D1long /*, Double_t Sioverlap*/, Double_t DSciFi1X, Double_t DSciFi1Y, Double_t DSciFi2X, Double_t DSciFi2Y){
   Dim1Short = D1short;
   Dim1Long = D1long;
-  overlap = Sioverlap;
+  //overlap = Sioverlap;
   DimSciFi1X = DSciFi1X;
   DimSciFi1Y = DSciFi1Y;
   DimSciFi2X = DSciFi2X;
@@ -195,11 +188,11 @@ void Spectrometer::ConstructGeometry()
 
 
     //Double_t DimZPixelBox = zs5 -zs0 +pairwisedistance + DimZSi;
-    TGeoBBox *PixelBox = new TGeoBBox("PixelBox", Dim1Long/2 + overlap, Dim1Long/2 + overlap, DimZPixelBox/2.);
+    TGeoBBox *PixelBox = new TGeoBBox("PixelBox", Dim1Long/2 /*+ overlap*/, Dim1Long/2 /*+ overlap*/, DimZPixelBox/2.);
     TGeoVolume *volPixelBox = new TGeoVolume("volPixelBox",PixelBox,air);
 
     top->AddNode(volPixelBox, 1, new TGeoTranslation(0,0,zBoxPosition));
-
+/*
     TGeoBBox *Pixely = new TGeoBBox("Pixely", Dim1Short/2, Dim1Long/2, DimZSi/2); //long along y
     TGeoVolume *volPixely = new TGeoVolume("volPixely",Pixely,Silicon); 
     volPixely->SetLineColor(kBlue-5);
@@ -222,7 +215,7 @@ void Spectrometer::ConstructGeometry()
     volPixelBox->AddNode(volPixely, 152, new TGeoTranslation(-overlap + Dim1Short/2.,0,-DimZPixelBox/2. + zs4 + pairwisedistance/2));
     volPixelBox->AddNode(volPixelx, 161, new TGeoTranslation(0,overlap - Dim1Short/2.,-DimZPixelBox/2. + zs5 - pairwisedistance/2)); 
     volPixelBox->AddNode(volPixelx, 162, new TGeoTranslation(0,-overlap + Dim1Short/2.,-DimZPixelBox/2. + zs5 + pairwisedistance/2)); 
-    
+    */
     TGeoBBox *SciFi1 = new TGeoBBox("SciFi1", DimSciFi1X/2, DimSciFi1Y/2, DimZ/2); 
     TGeoVolume *subvolSciFi1 = new TGeoVolume("volSciFi1",SciFi1,sttmix8020_2bar);
     subvolSciFi1->SetLineColor(kBlue-5);

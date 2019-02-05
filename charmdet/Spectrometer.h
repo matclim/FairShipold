@@ -25,9 +25,8 @@ class Spectrometer:public FairDetector
     void ConstructGeometry();
     void SetZsize(const Double_t MSsize);
     void SetBoxParam(Double_t SX, Double_t SY, Double_t SZ, Double_t zBox,Double_t SZPixel);
-    void SetTransverseSizes(Double_t D1X, Double_t D1Y, Double_t Sioverlap, Double_t DSciFi1X, Double_t DSciFi1Y, Double_t DSciFi2X, Double_t DSciFi2Y);
+    void SetTransverseSizes(Double_t D1X, Double_t D1Y/*, Double_t Sioverlap*/, Double_t DSciFi1X, Double_t DSciFi1Y, Double_t DSciFi2X, Double_t DSciFi2Y);
     void SetSciFiDetPositions(Double_t zSciFi1, Double_t zSciFi2);
-    void SetSiliconDetNumber(Int_t nSilicon);
      //methods for Goliath by Annarita
     void SetGoliathSizes(Double_t H, Double_t TS, Double_t LS, Double_t BasisH);
     void SetCoilParameters(Double_t CoilR, Double_t UpCoilH, Double_t LowCoilH, Double_t CoilD);
@@ -129,7 +128,7 @@ protected:
     Double_t zSizeMS = 0; //dimension of the Magnetic Spectrometer volume
 
     Double_t Dim1Short, Dim1Long;
-    Double_t overlap;
+   // Double_t overlap;
     Double_t DimSciFi1X;
     Double_t DimSciFi1Y;
     Double_t DimSciFi2X;;
@@ -137,7 +136,7 @@ protected:
     Double_t DimZPixelBox;
 
     Int_t nSi;
-    Double_t DimZSi;
+    
     Double_t zs0, zs1, zs2, zs3, zs4, zs5, pairwisedistance;
     Double_t zposSciFi1, zposSciFi2;
     

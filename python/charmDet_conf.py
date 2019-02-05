@@ -47,16 +47,16 @@ def configure(run,ship_geo):
    
 #-----Pixel Detector-----
 
- PixelDetector = ROOT.PixelDetector("PixelDetector",ship_geo.PixelDetector.PX, ship_geo.PixelDetector.PY, ship_geo.PixelDetector.PZ,ROOT.kTRUE, ship_geo.PixelDetector.NPixelPlanes)
- for Pixelplanenb in range(ship_geo.PixelDetector.NPixelPlanes):
- 	exec('PixelPlanePosition' + '=' + 'zSi_' + str(Pixelplanenb))
- 	PixelDetector.SetSiliconDetPositions(ship_geo.PixelDetector.locals()[PixelPlanePosition], ship_geo.PixelDetector.PairSiDistance)
+ PixelDetector = ROOT.PixelDetector("PixelDetector",ship_geo.PixelDetector.PX, ship_geo.PixelDetector.PY, ship_geo.PixelDetector.PZ,ROOT.kTRUE)
+# for Pixelplanenb in range(ship_geo.PixelDetector.NPixelPlanes):
+ #	exec('PixelPlanePosition' + '=' + 'zSi_' + str(Pixelplanenb))
+ PixelDetector.SetSiliconDetPositions(ship_geo.PixelDetector.zSi_0,ship_geo.PixelDetector.zSi_1,ship_geo.PixelDetector.zSi_2,ship_geo.PixelDetector.zSi_3,ship_geo.PixelDetector.zSi_4,ship_geo.PixelDetector.zSi_5)
 
 #-----End Pixel Detector-----
 
  Spectrometer = ROOT.Spectrometer("Spectrometer",ship_geo.Spectrometer.DX, ship_geo.Spectrometer.DY, ship_geo.Spectrometer.DZ,ROOT.kTRUE)
- Spectrometer.SetTransverseSizes(ship_geo.Spectrometer.D1Short, ship_geo.Spectrometer.D1Long, ship_geo.Spectrometer.Sioverlap, ship_geo.Spectrometer.DSciFi1X, ship_geo.Spectrometer.DSciFi1Y, ship_geo.Spectrometer.DSciFi2X, ship_geo.Spectrometer.DSciFi2Y)   
- Spectrometer.SetSiliconDZ(ship_geo.Spectrometer.DimZSi)
+ Spectrometer.SetTransverseSizes(ship_geo.Spectrometer.D1Short, ship_geo.Spectrometer.D1Long, ship_geo.Spectrometer.DSciFi1X, ship_geo.Spectrometer.DSciFi1Y, ship_geo.Spectrometer.DSciFi2X, ship_geo.Spectrometer.DSciFi2Y)   
+# Spectrometer.SetSiliconDZ(ship_geo.Spectrometer.DimZSi)
  #Spectrometer.SetSiliconDetNumber(ship_geo.Spectrometer.nSiDet)
  
  Spectrometer.SetSciFiDetPositions(ship_geo.Spectrometer.zSciFi1, ship_geo.Spectrometer.zSciFi2)
@@ -64,7 +64,7 @@ def configure(run,ship_geo):
  Spectrometer.SetGoliathSizes(ship_geo.Spectrometer.H, ship_geo.Spectrometer.TS, ship_geo.Spectrometer.LS, ship_geo.Spectrometer.BasisH);
  Spectrometer.SetCoilParameters(ship_geo.Spectrometer.CoilR, ship_geo.Spectrometer.UpCoilH, ship_geo.Spectrometer.LowCoilH,  ship_geo.Spectrometer.CoilD);
 # --------------------------------------
- Spectrometer.SetBoxParam(ship_geo.Spectrometer.SX,ship_geo.Spectrometer.SY,ship_geo.Spectrometer.SZ,ship_geo.Spectrometer.zBox, ship_geo.Spectrometer.DimZpixelbox) 
+ Spectrometer.SetBoxParam(ship_geo.Spectrometer.SX,ship_geo.Spectrometer.SY,ship_geo.Spectrometer.SZ,ship_geo.Spectrometer.zBox, ship_geo.PixelDetector.DimZSi) 
  if (ship_geo.MufluxSpectrometer.muflux==False):
   MufluxSpectrometer = ROOT.MufluxSpectrometer("MufluxSpectrometer",ship_geo.MufluxSpectrometer.DX, ship_geo.MufluxSpectrometer.DY,   ship_geo.MufluxSpectrometer.DZ,ROOT.kTRUE)
  else:

@@ -48,7 +48,7 @@ PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Doub
     void ConstructGeometry();  
     void SetPixelPlaneParam(Double_t X, Double_t Y, Double_t Z, Double_t Dist1, Double_t Dist2);
     void SetSiliconDZ(Double_t SiliconDZ);
-    void SetSiliconDetPositions(Double_t zSi, Double_t PairSiDistance);
+    void SetSiliconDetPositions(Double_t zSi0, Double_t zSi1, Double_t zSi2, Double_t zSi3, Double_t zSi4, Double_t zSi5);
     void SetSiliconDetAngles(Double_t Si_ang_zx, Double_t Si_ang_yz, Double_t Si_ang_xz);
     /**      Initialization of the detector is done here    */
     virtual void Initialize();
@@ -64,6 +64,7 @@ PixelDetector(const char* name, const Double_t PX, const Double_t PY, const Doub
     PixelDetectorPoint* AddHit(Int_t trackID, Int_t detID, TVector3 pos, TVector3 mom,
 		     Double_t time, Double_t length, Double_t eLoss, Int_t pdgCode);
 	    /** Initialization of the Pixel plane */
+    void SetSiliconPlaneNumber(Int_t nSilicon);
     
     virtual void   CopyClones( TClonesArray* cl1,  TClonesArray* cl2 , Int_t offset) {;}
     virtual void   SetSpecialPhysicsCuts() {;}
@@ -112,14 +113,22 @@ protected:
   
          
     //attributes for the pixel plane
+    Double_t DimZSi;
     Double_t PixPlaneX;
     Double_t PixPlaneY;
     Double_t PixPlaneZ;
+    Double_t zs0;
+    Double_t zs1;
+    Double_t zs2;
+    Double_t zs3;
+    Double_t zs4;
+    Double_t zs5;
     Double_t Pixel_ang_xy;
     Double_t Pixel_ang_yz;
     Double_t Pixel_ang_zx;
 	Double_t PixInterStationX = 10.;
     Double_t PixInterStationY = 10.;
+    Int_t nSi = 6;
     Int_t NPixelModulesperPLane;
     PixelDetector(const PixelDetector&);
     PixelDetector& operator=(const PixelDetector&);
